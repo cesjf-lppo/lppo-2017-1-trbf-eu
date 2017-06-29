@@ -16,10 +16,10 @@
                             <tbody>
                                 <c:forEach var="usuario" items="${usuarios}">
                                 <tr>
-                                    <th scope="row"><a href="Editar?id=${usuario.id}">${usuario.id}</a></th>
-                                    <td>${usuario.nomecompleto}</td>
+                                    <th scope="row">${usuario.id}</th>
+                                    <td>${usuario.nomeCompleto}</td>
                                     <td>${usuario.email}</td>
-                                    <td><a href="Excluir?id=${usuario.id}">&#128465;</a></td>
+                                    <td><button class="btn btn-primary btn-sm">Editar</button> <button class="btn btn-danger btn-sm">Excluir</button></td>
                                 </tr>
                                 </c:forEach>
                             </tbody>

@@ -59,7 +59,7 @@ public class UsuarioServlet extends HttpServlet {
     private void redirecionaCriarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try
         {
-            request.getRequestDispatcher("/WEB-INF/Usuario/criar.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/Usuario/listar.jsp").forward(request, response);
         }
         catch (Exception e)
         {
