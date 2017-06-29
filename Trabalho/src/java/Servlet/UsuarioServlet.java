@@ -9,6 +9,8 @@ import Controller.UsuarioJpaController;
 import Entidade.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -32,6 +34,7 @@ public class UsuarioServlet extends HttpServlet {
 
     @Resource(name = "java:comp/UserTransaction")
     UserTransaction ut;
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,6 +42,8 @@ public class UsuarioServlet extends HttpServlet {
     {
         if (request.getServletPath().contains("/Criar"))
             redirecionaCriarUsuario(request,response);
+        else if (request.getServletPath().contains("/Listar"))
+            redirecionaListarUsuarios(request,response);
         else
             response.sendError(500);
     }
@@ -82,4 +87,26 @@ public class UsuarioServlet extends HttpServlet {
             Logger.getLogger(UsuarioServlet.class.getName()).log(Level.SEVERE, null, erro);
         }
     }
+
+    private void redirecionaListarUsuarios(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        List<Usuario> usuarios = new ArrayList();
+        UsuarioJpaController servico = new UsuarioJpaController(ut, emf);
+        
+        
+        usuarios = servico.findUsuarioEntities();
+        request.setAttribute("usuarios", usuarios);
+        try
+        {
+            request.getRequestDispatcher("/WEB-INF/Usuario/listar.jsp").forward(request, response);
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("index.html");
+        }
+        
+        
+    }
+    
+    
 }
