@@ -44,6 +44,10 @@ public class UsuarioServlet extends HttpServlet {
             redirecionaCriarUsuario(request,response);
         else if (request.getServletPath().contains("/Listar"))
             redirecionaListarUsuarios(request,response);
+        else if (request.getServletPath().contains("/Editar"))
+            redirecionarEditarUsuario(request,response);
+        else if (request.getServletPath().contains("/Excluir"))
+            ExcluirUsuario(request,response);
         else
             response.sendError(500);
     }
@@ -54,12 +58,14 @@ public class UsuarioServlet extends HttpServlet {
     {
         if (request.getServletPath().contains("/Criar"))
             CriarUsuario(request,response);
+        else if (request.getServletPath().contains("/Editar"))
+            EditarUsuario(request,response);
     }
     
     private void redirecionaCriarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try
         {
-            request.getRequestDispatcher("/WEB-INF/Usuario/listar.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/Usuario/criar.jsp").forward(request, response);
         }
         catch (Exception e)
         {
@@ -80,7 +86,7 @@ public class UsuarioServlet extends HttpServlet {
         try
         {
             servicoUsuario.create(novoUsuario);
-            response.sendRedirect("/Usuario/Listar");
+            response.sendRedirect("Listar");
         }
         catch (Exception erro)
         {
@@ -106,6 +112,63 @@ public class UsuarioServlet extends HttpServlet {
         }
         
         
+    }
+
+    private void redirecionarEditarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        UsuarioJpaController servico = new UsuarioJpaController(ut, emf);
+        Long id = Long.parseLong(request.getParameter("matricula"));
+        Usuario usuario = servico.findUsuario(id);
+        
+        try
+        {
+            request.setAttribute("usuario", usuario);
+            request.getRequestDispatcher("/WEB-INF/Usuario/editar.jsp").forward(request, response);
+        }
+        catch (Exception e)
+        {
+            response.sendRedirect("index.html");
+
+        }
+    }
+
+    private void EditarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException 
+    {
+        UsuarioJpaController servico = new UsuarioJpaController(ut, emf);
+        Long id = Long.parseLong(request.getParameter("matricula"));
+        
+        Usuario usuario = servico.findUsuario(id);
+        usuario.setEmail(request.getParameter("email"));
+        usuario.setNomeCompleto(request.getParameter("nome"));
+        
+        try
+        {
+            servico.edit(usuario);
+            response.sendRedirect("Listar");
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("Listar");
+        }
+    }
+
+    private void ExcluirUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException 
+    {
+        UsuarioJpaController servico = new UsuarioJpaController(ut, emf);
+        Long id = Long.parseLong(request.getParameter("matricula"));
+        
+        try
+        {
+            servico.destroy(id);
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("Listar");
+        }
+        finally
+        {
+            response.sendRedirect("Listar");
+        }
     }
     
     

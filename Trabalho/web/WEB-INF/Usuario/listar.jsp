@@ -19,11 +19,20 @@
                                     <th scope="row">${usuario.id}</th>
                                     <td>${usuario.nomeCompleto}</td>
                                     <td>${usuario.email}</td>
-                                    <td><button class="btn btn-primary btn-sm">Editar</button> <button class="btn btn-danger btn-sm">Excluir</button></td>
+                                    <td><button class="btn btn-primary btn-sm" onclick="location.href='Editar?matricula=${usuario.id}'">Editar</button> <button class="btn btn-danger btn-sm" onclick="Excluir(${usuario.id},'${usuario.nomeCompleto}')">Excluir</button></td>
                                 </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
                     </div>
                 </div>
+<script>
+    function Excluir(id,nome)
+    {
+        if (confirm("Você deseja apagar o usuario "+nome+" ?"))
+            location.href="Excluir?matricula="+id;
+        else
+            return 0;
+    }
+</script>
 <%@include file="../partialView/body.jspf" %>
