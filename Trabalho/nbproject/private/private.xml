@@ -2,24 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/conf/persistence.xml</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/nbproject/build-impl.xml</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Controller/EtiquetaJpaController.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/web/WEB-INF/index.jsp</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/hibernate.cfg.xml</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Servlet/HomeServlet.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Entidade/Tarefa.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Servlet/TarefaServlet.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/web/index.html</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Servlet/UsuarioServlet.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Servlet/EtiquetaServlet.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/web/WEB-INF/Usuario/criar.jsp</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/web/WEB-INF/partialView/head.jspf</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Servlet/View.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/web/WEB-INF/partialView/layout.jsp</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Entidade/Usuario.java</file>
-            <file>file:/C:/Users/savio/Documents/NetBeansProjects/Trabalho/src/java/Entidade/Etiqueta.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
