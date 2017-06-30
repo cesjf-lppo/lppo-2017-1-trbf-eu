@@ -8,12 +8,14 @@ package Controller;
 import Controller.exceptions.NonexistentEntityException;
 import Controller.exceptions.RollbackFailureException;
 import Entidade.Etiqueta;
+import static com.fasterxml.classmate.types.ResolvedPrimitiveType.all;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -158,4 +160,17 @@ public class EtiquetaJpaController implements Serializable {
         }
     }
     
+    public List<Etiqueta> getEtiquetaPorAutor(Long id)  
+    {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Etiqueta.class));
+            Query q = em.createQuery(cq);
+            
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

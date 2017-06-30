@@ -110,8 +110,6 @@ public class UsuarioServlet extends HttpServlet {
         {
             response.sendRedirect("index.html");
         }
-        
-        
     }
 
     private void redirecionarEditarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -170,6 +168,4 @@ public class UsuarioServlet extends HttpServlet {
             response.sendRedirect("Listar");
         }
     }
-    
-    
 }

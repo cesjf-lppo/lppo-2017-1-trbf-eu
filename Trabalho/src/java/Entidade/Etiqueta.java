@@ -56,5 +56,19 @@ public class Etiqueta implements Serializable
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
+
+    /**
+     * @return the autor
+     */
+    public Usuario getAutor() {
+        return autor;
+    }
+
+    /**
+     * @param autor the autor to set
+     */
+    public void setAutor(Usuario autor) {
+        this.autor = autor;
+    }
     
 }

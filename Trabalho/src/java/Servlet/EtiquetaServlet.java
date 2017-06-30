@@ -5,8 +5,15 @@
  */
 package Servlet;
 
+import Controller.EtiquetaJpaController;
+import Controller.UsuarioJpaController;
+import Controller.exceptions.RollbackFailureException;
+import Entidade.Etiqueta;
+import Entidade.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -21,7 +28,7 @@ import javax.transaction.UserTransaction;
  *
  * @author savio
  */
-@WebServlet(name = "EtiquetaController", urlPatterns = {"/EtiquetaController"})
+@WebServlet(name = "EtiquetaController", urlPatterns = {"/Etiqueta/Criar", "/Etiqueta/Listar", "/Etiqueta/Editar","/Etiqueta/Excluir","/Etiqueta/FiltrarUsua"})
 public class EtiquetaServlet extends HttpServlet {
     @PersistenceUnit(unitName = "TrabalhoPU")
     EntityManagerFactory emf;
@@ -29,69 +36,131 @@ public class EtiquetaServlet extends HttpServlet {
     @Resource(name = "java:comp/UserTransaction")
     UserTransaction ut;
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EtiquetaController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EtiquetaController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        if (request.getServletPath().contains("/Criar"))
+            requisitarCriarEtiqueta(request,response);
+        else if (request.getServletPath().contains("/Listar"))
+            requisitarListaEtiqueta(request, response);
+        else if (request.getServletPath().contains("/Editar"))
+            requisitarEditarEtiqueta(request, response);
+        else if (request.getServletPath().contains("/Excluir"))
+            ExcluirEtiqueta(request, response);
+        else if (request.getServletPath().contains("/FiltrarUsua"))
+            FiltrarUsuario(request,response);
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        if (request.getServletPath().contains("/Criar"))
+            CriarEtiqueta(request,response);
+    }
+
+    private void requisitarCriarEtiqueta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
+        UsuarioJpaController servico = new UsuarioJpaController(ut, emf);
+        List<Usuario> usuarios = new ArrayList();
+        
+        usuarios = servico.findUsuarioEntities();
+        
+        request.setAttribute("usuarios", usuarios);
+        request.getRequestDispatcher("/WEB-INF/Etiqueta/criar.jsp").forward(request, response);
+    }
+
+    private void CriarEtiqueta(HttpServletRequest request, HttpServletResponse response) throws IOException 
+    {
+        Etiqueta etiqueta = new Etiqueta();
+        EtiquetaJpaController servico = new EtiquetaJpaController(ut, emf);
+        UsuarioJpaController servicoUsuario = new UsuarioJpaController(ut, emf);
+        
+        etiqueta.setTitulo(request.getParameter("titulo"));
+        etiqueta.setAutor(servicoUsuario.findUsuario(Long.parseLong(request.getParameter("usuario"))));
+        
+        try
+        {
+            servico.create(etiqueta);
+            response.sendRedirect("Listar");
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("Listar");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    private void requisitarListaEtiqueta(HttpServletRequest request, HttpServletResponse response) throws IOException 
+    {
+        EtiquetaJpaController servico = new EtiquetaJpaController(ut, emf);
+        UsuarioJpaController servicoUsuario = new UsuarioJpaController(ut, emf);
+        
+        Etiqueta etiqueta = new Etiqueta();
+        List<Etiqueta>  etiquetas = servico.findEtiquetaEntities();
+        List<Usuario> usuarios = servicoUsuario.findUsuarioEntities();
+        
+        try
+        {
+            request.setAttribute("usuarios", usuarios);
+            request.setAttribute("etiquetas", etiquetas);
+            request.getRequestDispatcher("/WEB-INF/Etiqueta/listar.jsp").forward(request, response);
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("Listar");
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    private void requisitarEditarEtiqueta(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        EtiquetaJpaController servico = new EtiquetaJpaController(ut, emf);
+        Etiqueta etiqueta = servico.findEtiqueta(Long.parseLong(request.getParameter("id")));
+        
+        try
+        {
+            request.setAttribute("etiqueta", etiqueta);
+            request.getRequestDispatcher("/WEB-INF/Etiqueta/editar.jsp").forward(request, response);
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("Listar");
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    private void ExcluirEtiqueta(HttpServletRequest request, HttpServletResponse response) throws IOException 
+    {
+        EtiquetaJpaController servico = new EtiquetaJpaController(ut, emf);
+        try
+        {
+            servico.destroy(Long.parseLong(request.getParameter("id")));
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("Listar");
+        }
+        finally
+        {
+            response.sendRedirect("Listar");
+        }
+                
+    }
 
+    private void FiltrarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException 
+    {
+        EtiquetaJpaController servico = new EtiquetaJpaController(ut, emf);
+        
+        Etiqueta etiqueta = new Etiqueta();
+        List<Etiqueta> etiquetas = servico.getEtiquetaPorAutor(Long.parseLong(request.getParameter("usuario")));
+        
+        try
+        {
+            request.setAttribute("etiquetas", etiquetas);
+            request.getRequestDispatcher("/WEB-INF/Etiqueta/listar.jsp").forward(request, response);
+        }
+        catch (Exception erro)
+        {
+            response.sendRedirect("Listar");
+        }
+    }
 }
