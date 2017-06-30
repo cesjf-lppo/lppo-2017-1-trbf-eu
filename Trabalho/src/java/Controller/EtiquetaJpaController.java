@@ -163,13 +163,13 @@ public class EtiquetaJpaController implements Serializable {
     public List<Etiqueta> getEtiquetaPorAutor(Long id)  
     {
         EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Etiqueta.class));
-            Query q = em.createQuery(cq);
-            
-            return q.getResultList();
-        } finally {
+       
+        try 
+        {
+            String sql = "select u from Etiqueta u where u.autor.id = :id";
+            return em.createQuery(sql,Etiqueta.class).setParameter("id", id).getResultList();
+        } 
+        finally {
             em.close();
         }
     }

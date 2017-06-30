@@ -7,6 +7,7 @@ package Controller;
 
 import Controller.exceptions.NonexistentEntityException;
 import Controller.exceptions.RollbackFailureException;
+import Entidade.Etiqueta;
 import Entidade.Tarefa;
 import java.io.Serializable;
 import java.util.List;
@@ -154,6 +155,20 @@ public class TarefaJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
+            em.close();
+        }
+    }
+    
+    public List<Tarefa> getTarefaporAutor(Long id)  
+    {
+        EntityManager em = getEntityManager();
+       
+        try 
+        {
+            String sql = "select u from Tarefa u where u.etiqueta.id = :id";
+            return em.createQuery(sql,Tarefa.class).setParameter("id", id).getResultList();
+        } 
+        finally {
             em.close();
         }
     }

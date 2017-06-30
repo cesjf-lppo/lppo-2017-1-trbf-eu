@@ -97,7 +97,7 @@ public class EtiquetaServlet extends HttpServlet {
         UsuarioJpaController servicoUsuario = new UsuarioJpaController(ut, emf);
         
         Etiqueta etiqueta = new Etiqueta();
-        List<Etiqueta>  etiquetas = servico.findEtiquetaEntities();
+        List<Etiqueta> etiquetas = servico.findEtiquetaEntities();
         List<Usuario> usuarios = servicoUsuario.findUsuarioEntities();
         
         try
@@ -149,12 +149,15 @@ public class EtiquetaServlet extends HttpServlet {
     private void FiltrarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException 
     {
         EtiquetaJpaController servico = new EtiquetaJpaController(ut, emf);
+        UsuarioJpaController usuarioServico = new UsuarioJpaController(ut, emf);
         
-        Etiqueta etiqueta = new Etiqueta();
+        List<Usuario> usuarios = usuarioServico.getUsuariocomEtiqueta();
         List<Etiqueta> etiquetas = servico.getEtiquetaPorAutor(Long.parseLong(request.getParameter("usuario")));
+        
         
         try
         {
+            request.setAttribute("usuarios", usuarios);
             request.setAttribute("etiquetas", etiquetas);
             request.getRequestDispatcher("/WEB-INF/Etiqueta/listar.jsp").forward(request, response);
         }

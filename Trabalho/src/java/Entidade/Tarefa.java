@@ -113,6 +113,20 @@ public class Tarefa implements Serializable
     public void setDataConclusao(Date dataConclusao) {
         this.dataConclusao = dataConclusao;
     }
+
+    /**
+     * @return the etiqueta
+     */
+    public Etiqueta getEtiqueta() {
+        return etiqueta;
+    }
+
+    /**
+     * @param etiqueta the etiqueta to set
+     */
+    public void setEtiqueta(Etiqueta etiqueta) {
+        this.etiqueta = etiqueta;
+    }
     
     
 }

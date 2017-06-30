@@ -5,7 +5,9 @@
  */
 package Servlet;
 
+import Controller.EtiquetaJpaController;
 import Controller.UsuarioJpaController;
+import Entidade.Etiqueta;
 import Entidade.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;

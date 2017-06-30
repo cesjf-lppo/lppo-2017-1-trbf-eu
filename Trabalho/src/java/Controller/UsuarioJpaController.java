@@ -7,6 +7,7 @@ package Controller;
 
 import Controller.exceptions.NonexistentEntityException;
 import Controller.exceptions.RollbackFailureException;
+import Entidade.Etiqueta;
 import Entidade.Usuario;
 import java.io.Serializable;
 import java.util.List;
@@ -158,4 +159,28 @@ public class UsuarioJpaController implements Serializable {
         }
     }
     
+    public List<Usuario> getUsuariocomEtiqueta()  
+    {
+        EntityManager em = getEntityManager();
+       
+        try 
+        {
+            String sql = "select distinct u.autor.id from Etiqueta u";
+            List<Long> usuario =  em.createQuery(sql,long.class).getResultList();
+            String matricula = "";
+            
+            for(Long s : usuario)
+            {
+                matricula += "'"+ s +"',";
+            }
+            
+            matricula += "'1'";
+            
+            String usuarioSQL = "select u from Usuario u where u.id in ("+ matricula +")";
+            return em.createQuery(usuarioSQL,Usuario.class).getResultList();
+        } 
+        finally {
+            em.close();
+        }
+    }
 }
